@@ -1,6 +1,7 @@
 package ru.mtuci.project.model;
 
-import jakarta.persistence.;
+
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,7 @@ public class Project {
     @Column
     private String name;
 
-    @Colomn
+    @Column
     private int number;
 
     @OneToOne
@@ -30,4 +31,5 @@ public class Project {
     private ProjectDetails details;
 }
 
-//подключить бд, создать две таблички: создать "Пользователя" (логин, пароль, id), создать сущность "Лицензии" (дата создания, имя, ключ ативации). Зависимость один к одному
+// Дз: подключить бд, создать две таблички: создать "Пользователя" (логин, пароль, id),
+// создать сущность "Лицензии" (дата создания, имя, ключ ативации). Зависимость один к одному

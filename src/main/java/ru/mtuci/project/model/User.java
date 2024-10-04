@@ -6,18 +6,24 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity
 @Getter
 @Setter
-@Entity
-@Table(name = "details")
-public class ProjectDetails {
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "licence")
+public class User {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    @Column(name = "location", nullable = false)
-    private String location;
+    @Column
+    private String date;
+
+    @Column
+    private String name;
+
+    @Column
+    private String key;
 }
