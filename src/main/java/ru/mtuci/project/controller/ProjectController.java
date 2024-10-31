@@ -10,7 +10,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/project")
-@RequiredArgsConstructor
 public class ProjectController {
 
     private final ProjectService projectService;
@@ -20,12 +19,14 @@ public class ProjectController {
     }
 
     @GetMapping("/")
-    public List<Project> getAll() {
-        return projectService.getAll();
+    @PreAuthorize("hasAnyAuthority('read')")
+    public List<Project> findAll() {
+        return projectService.findAll();
     }
 
     @PostMapping("/save")
-    public void getModProject (@RequestBody Project project) {
+    @PreAuthorize("hasAnyAuthority('modification')")
+    public void save(@RequestBody Project project) {
         projectService.save(project);
     }
 } 

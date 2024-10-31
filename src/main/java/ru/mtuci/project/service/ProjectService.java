@@ -9,7 +9,7 @@ public interface ProjectService {
 
     }
 
-    public List<Project> getAll() {
+    public List<Project> findAll() {
 
     }
 }

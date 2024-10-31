@@ -9,3 +9,7 @@ spring:
     hibernate:
       ddl-auto: create
     show-sql: true
+
+jwt:
+  secret: BlyostkinMikhailSergeevich22124
+  expiration: 3600000
