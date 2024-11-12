@@ -1,11 +1,13 @@
 package ru.mtuci.project.model;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,17 +21,22 @@ public class Project {
     @GeneratedValue
     private Long id;
 
-    @Column
+    @Column(name = "name")
     private String name;
 
-    @Column
+    @Column(name = "number")
     private int number;
 
-    @OneToOne
-    @MapsId
-    //@Colomn(nullable = false)
-    private ProjectDetails details;
-}
+    @OneToMany(mappedBy = "project")
+    @JsonIgnoreProperties("project")
+    private List<Details> details;
 
-// Дз: подключить бд, создать две таблички: создать "Пользователя" (логин, пароль, id),
-// создать сущность "Лицензии" (дата создания, имя, ключ ативации). Зависимость один к одному
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(
+            name = "project_info",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "project_id")
+
+    )
+    private List<Info> infos;
+}

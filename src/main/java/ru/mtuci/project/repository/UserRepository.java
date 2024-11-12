@@ -6,8 +6,9 @@ import ru.mtuci.project.model.ApplicationUser;
 import ru.mtuci.project.model.User;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<ApplicationUser> findByEmail(String email)
+public interface UserRepository extends JpaRepository<ApplicationUser, UUID> {
+    Optional<ApplicationUser> findByEmail(String email);
 }

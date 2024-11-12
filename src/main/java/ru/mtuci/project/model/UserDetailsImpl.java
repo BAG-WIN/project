@@ -1,24 +1,34 @@
 package ru.mtuci.project.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Set;
+
+@Data
+@AllArgsConstructor
 public class UserDetailsImpl implements UserDetails {
 
-    private final String username;
-    private final String password;
-    private List<GrantedAuthority> authorities;
-    private final boolean isActive;
+    private String username;
+    private String password;
+    private Set<GrantedAuthority> authorities;
+    private boolean isActive;
 
     @Override
-    public boolean isAccountNoneExpired() {
+    public boolean isAccountNonExpired() {
         return isActive;
     }
 
     @Override
-    public boolean isAccountNoneLoced() {
+    public boolean isAccountNonLocked() {
         return isActive;
     }
 
     @Override
-    public boolean isCredentilsNoneExpired() {
+    public boolean isCredentialsNonExpired() {
         return isActive;
     }
 
@@ -29,7 +39,9 @@ public class UserDetailsImpl implements UserDetails {
 
     public static UserDetails fromApplicationUser(ApplicationUser user) {
         return new User(
-                user.
+                user.getLogin(),
+                user.getPassword_hash(),
+                user.getApplicationRole().getGrantedAuthorities()
         );
     }
 }

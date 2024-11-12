@@ -1,6 +1,7 @@
 package ru.mtuci.project.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.mtuci.project.model.Project;
@@ -25,7 +26,7 @@ public class ProjectController {
     }
 
     @PostMapping("/save")
-    @PreAuthorize("hasAnyAuthority('modification')")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public void save(@RequestBody Project project) {
         projectService.save(project);
     }

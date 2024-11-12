@@ -5,11 +5,10 @@ import ru.mtuci.project.model.Project;
 import java.util.List;
 
 public interface ProjectService {
-    void save(Project project) {
 
-    }
+    void save(Project project);
 
-    public List<Project> findAll() {
+    List<Project> findAll();
 
-    }
+    Project findById(long id);
 }

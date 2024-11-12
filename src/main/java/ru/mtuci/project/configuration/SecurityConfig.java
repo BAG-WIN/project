@@ -1,14 +1,19 @@
 package ru.mtuci.project.configuration;
 
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Session;
-import org.hibernate.internal.SessionCreationOptions;
-import org.springframework.aot.generate.InMemoryGeneratedFiles;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.mtuci.project.model.ApplicationRole;
-import ru.mtuci.project.model.Permission;
-import ru.mtuci.project.service.UserDetailServiceImpl;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableMethodSecurity
@@ -16,30 +21,30 @@ import ru.mtuci.project.service.UserDetailServiceImpl;
 public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final UserDetailService userDetailService;
+    private final UserDetailsService userDetailsService;
 
     @Bean
     public JwtTokenFilter jwtTokenFilter() {
-        return new JwtTokenFilter(jwtTokenProvider, userDetailService);
+        return new JwtTokenFilter(jwtTokenProvider, userDetailsService);
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy))
-                .authorizeHttpRequest((authz) -> authz
-                    //.requestMatchers("/project").hasAnyAuthoriry(Permission.READ.getPermission())
-                    //.requestMatchers(HttpMethod.POST, "/project/save").hasAuthoriry(Permission.MODIFICATION.getPermission())
-                    .anyRequest().authenficated());
-        http.httpBasic(Customizer.withGefaults());
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(authz -> authz
+                        .requestMatchers("auth/login").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
 
     @Bean
-    public AuthenticationManager authenticationManager() throws  {
-        return authenticationConfiguration.getAuthenficationManager;
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
     /*@Bean
